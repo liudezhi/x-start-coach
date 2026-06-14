@@ -43,6 +43,7 @@ Use these fallbacks:
 
 - If browsing is unavailable, separate stable knowledge from claims that require current verification and disclose the limitation briefly.
 - If file writing is unavailable, return the complete Markdown inline.
+- If image generation is available, generate exactly one teaching image for each completed concept explanation, comparison, or tutorial unless the user explicitly opts out.
 - If image generation is unavailable, create a Mermaid diagram or a precise text diagram.
 - If Mermaid rendering is unavailable, keep the Mermaid source embedded in Markdown.
 
@@ -162,7 +163,16 @@ Check definitions, missing conditions, category errors, misleading analogies, au
 
 ## Create Diagrams
 
-Create a diagram when the user asks for one or when relationships are difficult to understand in prose.
+Create exactly one teaching image by default for each completed concept explanation, comparison, or tutorial when the current environment provides image-generation capability. Generate it after the explanation and relationships have been established so the image reflects verified content. During Socratic coaching, generate it with the final recap rather than on every turn. Skip it only when the user explicitly requests no image.
+
+Use the platform's available image-generation path:
+
+- In Codex, use the available GPT Image 2 image-generation skill or tool.
+- In Gemini CLI, use Nano Banana when the corresponding image-generation capability or extension is installed.
+- In Claude Code, use an available image-generation tool, MCP server, plugin, or skill.
+- In other agents, use the equivalent native or configured image-generation capability.
+
+These are platform examples, not hard dependencies. Detect actual tool availability before invoking anything.
 
 Choose the structure from the relationship:
 
@@ -174,18 +184,22 @@ Choose the structure from the relationship:
 - Lifecycle for recurring stages.
 - Comparison table when differences matter more than sequence.
 
-Use Mermaid as the portable default. Use an available image-generation or rendering tool only when the user requests a polished image or the target format requires one.
+When image generation is unavailable, use Mermaid as the portable fallback.
 
 Diagram rules:
 
 - Base every relationship on the explanation or verified research.
 - Match labels to the user's language.
+- Visualize the concept's purpose, larger-system position, components, mechanism, inputs and outputs, boundaries, and neighboring concepts when relevant.
 - Prefer a readable teaching diagram over dense decoration.
 - Keep paragraphs out of nodes.
 - Do not add unsupported relationships, fake citations, logos, or watermarks.
+- Prefer a landscape teaching-slide composition, high contrast, concise labels, and restrained colors.
 - Inspect the result for legibility and conceptual correctness; revise important errors before delivery.
 
 ## Create Artifacts
+
+The default teaching-image rule applies even when the user does not request a saved artifact. In a chat-only response, generate and return or attach the image through the available image tool. Save it to the workspace only when creating a reusable file, when the image tool returns a file that must be preserved, or when the user requests a saved image.
 
 Create files only when the user requests a reusable artifact or the task clearly asks for one.
 
@@ -194,7 +208,7 @@ When filesystem access is available:
 - Default tutorials to `tutorials/<topic-slug>.md`.
 - Default rendered diagrams to `diagrams/<topic-slug>-diagram.<ext>`.
 - Use a stable filesystem-safe slug.
-- Embed diagrams with relative paths.
+- Save the generated teaching image in the workspace and embed it with a relative path when producing a Markdown artifact.
 - Do not overwrite existing files unless requested; create a versioned sibling.
 - Report the saved paths.
 

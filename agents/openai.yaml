@@ -1,4 +1,4 @@
 interface:
   display_name: "X Start Coach"
   short_description: "讲清、对比、审查各类概念，并生成教程、自测题与关系图。"
-  default_prompt: "使用这个 skill 帮我准确理解一个概念，并按我的目标选择讲解、对比、训练或教程模式。"
+  default_prompt: "使用这个 skill 帮我准确理解一个概念，并按我的目标选择讲解、对比、训练或教程模式；如果具备图片生成能力，生成一张教学图片。"
