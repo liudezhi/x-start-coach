@@ -199,16 +199,16 @@ Diagram rules:
 
 ## Create Artifacts
 
-The default teaching-image rule applies even when the user does not request a saved artifact. In a chat-only response, generate and return or attach the image through the available image tool. Save it to the workspace only when creating a reusable file, when the image tool returns a file that must be preserved, or when the user requests a saved image.
-
-Create files only when the user requests a reusable artifact or the task clearly asks for one.
+The default teaching-image rule applies even when the user does not request a saved artifact. For each completed concept explanation, comparison, or tutorial, create a new topic folder in the workspace and save the response as Markdown together with the generated teaching image or Mermaid fallback. Return a concise chat summary and report the saved paths.
 
 When filesystem access is available:
 
-- Default tutorials to `tutorials/<topic-slug>.md`.
-- Default rendered diagrams to `diagrams/<topic-slug>-diagram.<ext>`.
+- Default each completed learning artifact to `tutorials/<topic-slug>/`.
+- Save the Markdown response as `tutorials/<topic-slug>/index.md`.
+- Save the generated teaching image as `tutorials/<topic-slug>/<topic-slug>-diagram.<ext>` when the image tool returns a savable file or binary. If the image is only returned as an attachment without a stable file path, embed the available image reference in Markdown and note that no local image file was created.
+- If using Mermaid fallback, save the Mermaid source in the Markdown and, when rendering is available, save the rendered diagram as `tutorials/<topic-slug>/<topic-slug>-diagram.<ext>`.
 - Use a stable filesystem-safe slug.
-- Save the generated teaching image in the workspace and embed it with a relative path when producing a Markdown artifact.
+- Embed local images in Markdown with relative paths from `index.md`.
 - Do not overwrite existing files unless requested; create a versioned sibling.
 - Report the saved paths.
 
